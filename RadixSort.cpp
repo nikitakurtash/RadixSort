@@ -4,49 +4,70 @@
 #include <algorithm>
 #include <ctime>
 #include <cstdlib>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 bool is_sorted(const vector<string>& arr);
 void counting_sort(vector<string>& arr, int index);
 void radix_sort(vector<string>& arr);
 vector<string> generate_random_strings(int n, int length);
+void print_strings(const vector<string>& arr);
 
 int main() {
     // Инициализация генератора случайных чисел
     srand(static_cast<unsigned int>(time(nullptr)));
+
     // Тестирование среднего случая
-    vector<string> test_case = generate_random_strings(100, 5);
+    vector<string> test_case = generate_random_strings(5, 5);
+    auto start = high_resolution_clock::now();
     radix_sort(test_case);
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<nanoseconds>(stop - start);
     if (is_sorted(test_case)) {
         cout << "Medium case: successful\n";
+        print_strings(test_case);
+        cout << "Time taken: " << duration.count() << " ms\n\n";
     }
     else {
         cout << "Medium case: failed\n";
     }
 
-    // Тестирование лучшего случая
-    vector<string> best_case = { "apple", "banana", "grape", "lemon", "orange" };
-    radix_sort(best_case);
-    if (is_sorted(best_case)) {
-        cout << "Best case: successful\n";
-    }
-    else {
-        cout << "Best Case: failed\n";
-    }
-
     // Тестирование худшего случая
     vector<string> worst_case = { "orange", "lemon", "grape", "banana", "apple" };
+    start = high_resolution_clock::now();
     radix_sort(worst_case);
+    stop = high_resolution_clock::now();
+    duration = duration_cast<nanoseconds>(stop - start);
     if (is_sorted(worst_case)) {
         cout << "Worst case: successful\n";
+        print_strings(worst_case);
+        cout << "Time taken: " << duration.count() << " ms\n\n";
     }
     else {
-        cout << "Worst Case: failed\n";
+        cout << "Worst case: failed\n";
+    }
+
+    // Тестирование лучшего случая
+    vector<string> best_case = { "apple", "banana", "grape", "lemon", "orange" };
+    start = high_resolution_clock::now();
+    radix_sort(best_case);
+    stop = high_resolution_clock::now();
+    duration = duration_cast<nanoseconds>(stop - start);
+    if (is_sorted(best_case)) {
+        cout << "Best case: successful\n";
+        print_strings(best_case);
+        cout << "Time taken: " << duration.count() << " ms\n\n";
+    }
+    else {
+        cout << "Best case: failed\n";
     }
 
     return 0;
 }
+
+
 
 // Функция проверки упорядоченности массива строк
 bool is_sorted(const vector<string>& arr)
@@ -130,4 +151,11 @@ vector<string> generate_random_strings(int n, int length)
         result[i] = s;
     }
     return result;
+}
+
+void print_strings(const vector<string>& arr)
+{
+    for (const string& s : arr) {
+        cout << s << endl;
+    }
 }
